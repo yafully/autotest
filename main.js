@@ -13,11 +13,11 @@ const entryUrl = baseUrl + "customer/account/login/";
 const productUrl = baseUrl + "simple-silver-stackable-promise-ring-carve-heart.html";
 const checkoutUrl = baseUrl + "checkout/onepage/";
 const ShippingUrl = baseUrl + "checkout/onepage/saveShippingMethod/";
-const totalUrl = baseUrl + "checkout/onepage/updateTotals/";
+
 
 const uerInfo = {
-    email: "chris78866326@163.com",
-    passwd: "78866326"
+    email: "username@163.com",
+    passwd: "yourpass"
 };
 const pupPage = new PageObject({
     headless : false,
@@ -65,7 +65,6 @@ const pupPage = new PageObject({
     const shipRd = (await page.$$('input[name="shipping_method"]'))[0];
     await Promise.all([
         page.waitForResponse(ShippingUrl),//等待ajax执行完毕
-        //page.click(rd),
         shipRd.click(),
         page.click('#shippingSave'),
         page.waitForResponse(ShippingUrl)//等待ajax执行完毕
@@ -76,13 +75,7 @@ const pupPage = new PageObject({
 
     await Promise.all([
         page.waitForResponse(ShippingUrl),
-        //payRd.click(),
         page.click('#p_method_cashondelivery'),
-        //page.click('#placeorderBtn')
-        // page.evaluate(() => {
-        //     console.log(window.payment);
-        // })
-        // page.waitForNavigation({ waitUntil: 'networkidle0'})
     ]);
 
     await page.screenshot({
@@ -90,7 +83,7 @@ const pupPage = new PageObject({
         type:'png'
     });
 
-    //browser.close();
+    browser.close();
     debug('任务结束');
-    //process.exit(0);//结束任务
+    process.exit(0);//结束任务
 })()
