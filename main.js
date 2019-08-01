@@ -20,9 +20,9 @@ const uerInfo = {
     passwd: "yourpass"
 };
 const pupPage = new PageObject({
-    headless : false,
-    mobile: false,
-    viewport:{width: 1200, height: 720}
+    headless : false,//是否显示浏览器
+    mobile: false,//是否以手机模式运行
+    viewport:{width: 1200, height: 720}//浏览器窗体大小
 });
 
 (async function(){
@@ -35,31 +35,31 @@ const pupPage = new PageObject({
         waitUntil: 'networkidle0'  // 网络空闲说明已加载完毕
     });
 
-    //login
+    //login 输入用户名和密码
     await page.type('#email', uerInfo.email);
     await page.type('#password', uerInfo.passwd);
-    
+    //提交表单
     await Promise.all([
         page.$eval('#login-form', form => form.submit()),
         page.waitForNavigation({ waitUntil: 'networkidle0'})
     ]);
     
-    //add buy product to cart
+    //勾选要买的产品
     await page.goto(productUrl, {
         waitUntil: 'networkidle0'  // 网络空闲说明已加载完毕
     });
-
+    //提交购物车
     await Promise.all([
         page.select('#attribute380', '1515'),//选择select
         page.$eval('#product_addtocart_form', form => form.submit()),
         page.waitForNavigation({ waitUntil: 'networkidle0'})
     ]);
 
-    //checkout
+    //结算
     await page.goto(checkoutUrl, {
         waitUntil: 'networkidle0'  // 网络空闲说明已加载完毕
     });
-    //shipping
+    //选择运输方式
     await sleep(1500);
 
     const shipRd = (await page.$$('input[name="shipping_method"]'))[0];
@@ -70,7 +70,7 @@ const pupPage = new PageObject({
         page.waitForResponse(ShippingUrl)//等待ajax执行完毕
 
     ]);
-    //payment
+    //选择支付方式，下单
     await sleep(1000);
 
     await Promise.all([
